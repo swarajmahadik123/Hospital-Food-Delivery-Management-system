@@ -1,26 +1,28 @@
-const mongoose = require("mongoose");
+import mongoose from 'mongoose';
 
-const foodChartSchema = new mongoose.Schema(
+const { Schema, model } = mongoose;
+
+const foodChartSchema = new Schema(
   {
     patientId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Patient",
+      type: Schema.Types.ObjectId,
+      ref: 'Patient',
       required: true,
     },
     morningMeal: {
       ingredients: { type: [String], default: [] },
-      instructions: { type: String, default: "" },
+      instructions: { type: String, default: '' },
     },
     eveningMeal: {
       ingredients: { type: [String], default: [] },
-      instructions: { type: String, default: "" },
+      instructions: { type: String, default: '' },
     },
     nightMeal: {
       ingredients: { type: [String], default: [] },
-      instructions: { type: String, default: "" },
+      instructions: { type: String, default: '' },
     },
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("FoodChart", foodChartSchema);
+export default model('FoodChart', foodChartSchema);

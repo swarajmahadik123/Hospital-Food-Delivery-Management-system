@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import axios from "axios";
 import { AuthLayout } from "../components/Auth/AuthLayout";
+import { useNavigate } from "react-router-dom";
 
 export default function Signup() {
   const [name, setName] = useState("");
@@ -9,6 +10,7 @@ export default function Signup() {
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("pantry_staff");
   const [error, setError] = useState("");
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,7 +21,12 @@ export default function Signup() {
         { name, email, password, role }
       );
       console.log(response.data);
-      // Handle successful registration (e.g., redirect to login)
+
+      // Set a cookie after successful registration
+      document.cookie = `token=${response.data.token}; path=/; max-age=3600`; // Expires in 1 hour
+
+      // Redirect to the login page
+      navigate("/login");
     } catch (err) {
       setError(err.response?.data?.message || "An error occurred");
     }

@@ -4,46 +4,117 @@ import {
   ClipboardList,
   CookingPot,
   LayoutDashboard,
-  Settings,
+  UserCircle,
+  Truck,
   LogOut,
 } from "lucide-react";
 import { useState } from "react";
 
-const menuItems = [
+// Menu items for Admin
+const adminMenuItems = [
   {
     title: "Dashboard",
     icon: LayoutDashboard,
-    path: "/dashboard",
+    section: "dashboard",
   },
   {
     title: "Patient Details",
     icon: Users,
-    path: "/patients",
+    section: "patients",
   },
   {
     title: "Diet Charts",
     icon: ClipboardList,
-    path: "/diet-charts",
+    section: "diet-charts",
   },
   {
     title: "Pantry Management",
     icon: CookingPot,
-    path: "/pantry",
+    section: "pantry",
   },
   {
-    title: "Settings",
-    icon: Settings,
-    path: "/settings",
+    title: "Delivery Tracking",
+    icon: Truck,
+    section: "delivery-tracking",
+  },
+  {
+    title: "Profile",
+    icon: UserCircle,
+    section: "profile",
   },
 ];
 
-export function Sidebar() {
-  const [activeItem, setActiveItem] = useState("/dashboard");
+// Menu items for Pantry Staff
+const pantryStaffMenuItems = [
+  {
+    title: "Dashboard",
+    icon: LayoutDashboard,
+    section: "dashboard",
+  },
+  {
+    title: "Pantry Management",
+    icon: CookingPot,
+    section: "pantry",
+  },
+  {
+    title: "Delivery Tracking",
+    icon: Truck,
+    section: "delivery-tracking",
+  },
+  {
+    title: "Profile",
+    icon: UserCircle,
+    section: "profile",
+  },
+];
 
-  const handleNavigation = (path) => {
-    setActiveItem(path);
-    // You can add your routing logic here
-    // history.push(path) if using react-router
+// Menu items for Delivery Personnel
+const deliveryPersonnelMenuItems = [
+  {
+    title: "Dashboard",
+    icon: LayoutDashboard,
+    section: "dashboard",
+  },
+  {
+    title: "Delivery Tracking",
+    icon: Truck,
+    section: "delivery-tracking",
+  },
+  {
+    title: "Profile",
+    icon: UserCircle,
+    section: "profile",
+  },
+];
+const handleLogOut = () => {
+  //remove the cookie and user type from local storage
+  localStorage.removeItem("userType");
+  localStorage.removeItem("token");
+
+  //redirect to login page
+  window.location.href = "/login";
+};
+
+export function Sidebar({ onSelectSection, userType }) {
+  const [activeSection, setActiveSection] = useState("dashboard");
+
+  // Get menu items based on user type
+  const getMenuItems = () => {
+    switch (userType) {
+      case "admin":
+        return adminMenuItems;
+      case "pantry_staff":
+        return pantryStaffMenuItems;
+      case "delivery_personnel":
+        return deliveryPersonnelMenuItems;
+      default:
+        return [];
+    }
+  };
+
+  const handleNavigation = (section) => {
+    setActiveSection(section);
+    onSelectSection(section);
   };
 
   return (
@@ -60,7 +131,7 @@ export function Sidebar() {
       </div>
 
       <nav className="space-y-2">
-        {menuItems.map((item, index) => (
+        {getMenuItems().map((item, index) => (
           <motion.div
             key={item.title}
             initial={{ x: -50, opacity: 0 }}
@@ -68,9 +139,9 @@ export function Sidebar() {
             transition={{ delay: index * 0.1 }}
           >
             <button
-              onClick={() => handleNavigation(item.path)}
+              onClick={() => handleNavigation(item.section)}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${
-                activeItem === item.path
+                activeSection === item.section
                   ? "bg-gradient-to-br from-[#868CFF] to-[#4318FF] text-white shadow-lg shadow-[#4318FF]/30"
                   : "text-gray-600 hover:bg-gray-50"
               }`}
@@ -88,7 +159,10 @@ export function Sidebar() {
         transition={{ delay: 0.5 }}
         className="absolute bottom-8 left-6"
       >
-        <button className="flex items-center gap-3 px-4 py-3 text-gray-600 hover:text-gray-800 transition-colors">
+        <button
+          onClick={handleLogOut}
+          className="flex items-center gap-3 px-4 py-3 text-gray-600 hover:text-gray-800 transition-colors"
+        >
           <LogOut className="h-5 w-5" />
           <span>Logout</span>
         </button>

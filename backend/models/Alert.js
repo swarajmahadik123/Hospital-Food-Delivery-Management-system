@@ -1,20 +1,20 @@
-const mongoose = require("mongoose");
+import mongoose from 'mongoose';
 
 const alertSchema = new mongoose.Schema(
   {
     taskId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "MealTask",
+      ref: 'MealTask',
       required: true,
     },
     message: { type: String, required: true },
     status: {
       type: String,
-      enum: ["unresolved", "resolved"],
-      default: "unresolved",
+      enum: ['unresolved', 'resolved'],
+      default: 'unresolved',
     },
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Alert", alertSchema);
+export default mongoose.model('Alert', alertSchema);

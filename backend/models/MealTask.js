@@ -1,40 +1,42 @@
-const mongoose = require("mongoose");
+import mongoose from 'mongoose';
 
-const mealTaskSchema = new mongoose.Schema(
+const { Schema } = mongoose;
+
+const mealTaskSchema = new Schema(
   {
     patientId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Patient",
+      type: Schema.Types.ObjectId,
+      ref: 'Patient',
       required: true,
     },
     foodChartId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "FoodChart",
+      type: Schema.Types.ObjectId,
+      ref: 'FoodChart',
       required: true,
     },
     mealType: {
       type: String,
-      enum: ["morning", "evening", "night"],
+      enum: ['morning', 'evening', 'night'],
       required: true,
     },
     assignedTo: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "PantryStaff",
+      type: Schema.Types.ObjectId,
+      ref: 'PantryStaff',
       required: true,
     },
     preparationStatus: {
       type: String,
-      enum: ["pending", "in_progress", "completed"],
-      default: "pending",
+      enum: ['pending', 'in_progress', 'completed'],
+      default: 'pending',
     },
     deliveryStatus: {
       type: String,
-      enum: ["pending", "out_for_delivery", "delivered"],
-      default: "pending",
+      enum: ['pending', 'out_for_delivery', 'delivered'],
+      default: 'pending',
     },
     deliveryPersonnelId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "DeliveryPersonnel",
+      type: Schema.Types.ObjectId,
+      ref: 'DeliveryPersonnel',
     },
     deliveryTimestamp: { type: Date },
     deliveryNotes: { type: String },
@@ -42,4 +44,4 @@ const mealTaskSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("MealTask", mealTaskSchema);
+export default mongoose.model('MealTask', mealTaskSchema);

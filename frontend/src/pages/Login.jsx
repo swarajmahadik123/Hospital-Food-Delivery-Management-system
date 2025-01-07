@@ -1,12 +1,15 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { motion } from "framer-motion";
 import axios from "axios";
 import { AuthLayout } from "../components/Auth/AuthLayout";
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "../context/userContext";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -14,10 +17,18 @@ export default function Login() {
     try {
       const response = await axios.post(
         "http://localhost:5000/api/auth/login",
-        { email, password }
+        {
+          email,
+          password,
+        }
       );
       console.log(response.data);
-      // Handle successful login (e.g., store token, redirect)
+      localStorage.setItem("userType", response.data.role);
+      // Store the token in local storage
+      localStorage.setItem("token", response.data.token);
+
+      // Navigate to the dashboard after successful login
+      navigate("/dashboard");
     } catch (err) {
       setError(err.response?.data?.message || "An error occurred");
     }

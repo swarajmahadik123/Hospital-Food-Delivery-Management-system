@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from 'mongoose';
 
 const pantryStaffSchema = new mongoose.Schema(
   {
@@ -9,4 +9,4 @@ const pantryStaffSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("PantryStaff", pantryStaffSchema);
+export default mongoose.model('PantryStaff', pantryStaffSchema);

@@ -1,6 +1,8 @@
-const mongoose = require("mongoose");
+import mongoose from 'mongoose';
 
-const patientSchema = new mongoose.Schema(
+const { Schema, model } = mongoose;
+
+const patientSchema = new Schema(
   {
     name: { type: String, required: true },
     diseases: { type: [String], default: [] },
@@ -16,5 +18,4 @@ const patientSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Patient", patientSchema);
-
+export default model('Patient', patientSchema);
