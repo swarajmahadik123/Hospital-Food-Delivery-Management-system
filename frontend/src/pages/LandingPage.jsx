@@ -36,6 +36,9 @@ const floatingAnimation = {
     ease: "easeInOut",
   },
 };
+const handleGetStarted = () => {
+  window.location.href = "/dashboard";
+};
 
 export default function LandingPage() {
   return (
@@ -51,7 +54,10 @@ export default function LandingPage() {
               MediFood
             </span>
           </div>
-          <button className="bg-gradient-to-r from-[#868CFF] to-[#4318FF] text-white rounded-xl px-4 py-2 text-sm sm:text-base">
+          <button
+            onClick={handleGetStarted}
+            className="bg-gradient-to-r from-[#868CFF] to-[#4318FF] text-white rounded-xl px-4 py-2 text-sm sm:text-base"
+          >
             Get Started
             <ArrowRight className="ml-2 h-4 w-4 inline" />
           </button>
@@ -82,7 +88,10 @@ export default function LandingPage() {
                 care.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <button className="h-12 px-6 bg-gradient-to-r from-[#868CFF] to-[#4318FF] text-white rounded-xl hover:opacity-90 transition-opacity">
+                <button
+                  onClick={handleGetStarted}
+                  className="h-12 px-6 bg-gradient-to-r from-[#868CFF] to-[#4318FF] text-white rounded-xl hover:opacity-90 transition-opacity"
+                >
                   Get Started
                   <ArrowRight className="ml-2 h-4 w-4 inline" />
                 </button>

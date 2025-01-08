@@ -1,21 +1,27 @@
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
-import { Plus } from "lucide-react";
-import PatientDetails from "../../../pages/PatientDetails.jsx";
+import { Plus, ChevronRight } from "lucide-react";
+import PatientDetails from "../../../pages/PatientDetails"
 import {
   createPatient,
   getAllPatients,
   getPatientById,
   updatePatient,
   deletePatient,
-} from "../../../services/patientServices.js"; // Import API functions
+} from "../../../services/patientServices";
+
+const fadeInUp = {
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -20 },
+  transition: { duration: 0.3 },
+};
 
 export default function PatientsSection() {
   const [patients, setPatients] = useState([]);
   const [selectedPatient, setSelectedPatient] = useState(null);
   const [isAddingPatient, setIsAddingPatient] = useState(false);
 
-  // Fetch all patients on component mount
   useEffect(() => {
     fetchPatients();
   }, []);
@@ -29,7 +35,6 @@ export default function PatientsSection() {
     }
   };
 
-  // Handle clicking on a patient
   const handlePatientClick = async (patient) => {
     try {
       const patientData = await getPatientById(patient._id);
@@ -39,7 +44,6 @@ export default function PatientsSection() {
     }
   };
 
-  // Handle adding a new patient
   const handleAddPatient = () => {
     setIsAddingPatient(true);
     setSelectedPatient({
@@ -57,17 +61,14 @@ export default function PatientsSection() {
     });
   };
 
-  // Handle saving a patient (create or update)
   const handleSavePatient = async (updatedPatient) => {
     try {
       if (updatedPatient._id) {
-        // Update existing patient
         await updatePatient(updatedPatient._id, updatedPatient);
       } else {
-        // Add new patient
         await createPatient(updatedPatient);
       }
-      fetchPatients(); // Refresh the patient list
+      fetchPatients();
       setSelectedPatient(null);
       setIsAddingPatient(false);
     } catch (error) {
@@ -75,11 +76,10 @@ export default function PatientsSection() {
     }
   };
 
-  // Handle deleting a patient
   const handleDeletePatient = async (patientId) => {
     try {
       await deletePatient(patientId);
-      fetchPatients(); // Refresh the patient list
+      fetchPatients();
       setSelectedPatient(null);
     } catch (error) {
       console.error("Error deleting patient:", error);
@@ -88,54 +88,63 @@ export default function PatientsSection() {
 
   return (
     <motion.div
-      initial={{ y: 20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ delay: 0.4 }}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      variants={fadeInUp}
       className="bg-white p-6 rounded-xl shadow-lg"
     >
-      <h2 className="text-lg font-semibold mb-4">Patient Details</h2>
+      <h2 className="text-2xl font-bold mb-6 text-gray-800">
+        Patient Management
+      </h2>
 
-      {selectedPatient || isAddingPatient ? (
-        // Show patient details for CRUD operations
-        <PatientDetails
-          patient={selectedPatient}
-          onSave={handleSavePatient}
-          onDelete={handleDeletePatient}
-          onCancel={() => {
-            setSelectedPatient(null);
-            setIsAddingPatient(false);
-          }}
-        />
-      ) : (
-        // Show the list of patients
-        <div className="space-y-4">
-          <button
-            onClick={handleAddPatient}
-            className="flex items-center gap-2 px-4 py-2 bg-[#4318FF] text-white rounded-lg hover:bg-[#868CFF] transition-colors"
-          >
-            <Plus className="h-5 w-5" />
-            <span>Add Patient</span>
-          </button>
+      <AnimatePresence mode="wait">
+        {selectedPatient || isAddingPatient ? (
+          <motion.div key="details" {...fadeInUp}>
+            <PatientDetails
+              patient={selectedPatient}
+              onSave={handleSavePatient}
+              onDelete={handleDeletePatient}
+              onCancel={() => {
+                setSelectedPatient(null);
+                setIsAddingPatient(false);
+              }}
+            />
+          </motion.div>
+        ) : (
+          <motion.div key="list" {...fadeInUp} className="space-y-4">
+            <button
+              onClick={handleAddPatient}
+              className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#868CFF] to-[#4318FF] text-white rounded-lg hover:opacity-90 transition-opacity"
+            >
+              <Plus className="h-5 w-5" />
+              <span>Add Patient</span>
+            </button>
 
-          <div className="space-y-2">
-            {patients.map((patient) => (
-              <div
-                key={patient._id}
-                onClick={() => handlePatientClick(patient)}
-                className="flex items-center justify-between p-4 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors"
-              >
-                <div>
-                  <p className="font-medium">{patient.name}</p>
-                  <p className="text-sm text-gray-500">
-                    Room {patient.roomNumber}, Bed {patient.bedNumber}
-                  </p>
-                </div>
-                <span className="text-[#4318FF]">View Details</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+            <div className="space-y-3">
+              {patients.map((patient) => (
+                <motion.div
+                  key={patient._id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.2 }}
+                  onClick={() => handlePatientClick(patient)}
+                  className="flex items-center justify-between p-4 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors"
+                >
+                  <div>
+                    <p className="font-medium text-gray-800">{patient.name}</p>
+                    <p className="text-sm text-gray-500">
+                      Room {patient.roomNumber}, Bed {patient.bedNumber}
+                    </p>
+                  </div>
+                  <ChevronRight className="text-[#4318FF] h-5 w-5" />
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }

@@ -24,6 +24,7 @@ export default function Login() {
       );
       console.log(response.data);
       localStorage.setItem("userType", response.data.role);
+      localStorage.setItem("userId", response.data._id);
       // Store the token in local storage
       localStorage.setItem("token", response.data.token);
 

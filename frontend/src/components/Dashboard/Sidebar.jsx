@@ -7,11 +7,19 @@ import {
   UserCircle,
   Truck,
   LogOut,
+  ListChecks,
+  UserPlus,
+  PackageCheck,
 } from "lucide-react";
 import { useState } from "react";
 
 // Menu items for Admin
 const adminMenuItems = [
+  {
+    title: "Profile",
+    icon: UserCircle,
+    section: "profile",
+  },
   {
     title: "Dashboard",
     icon: LayoutDashboard,
@@ -37,40 +45,40 @@ const adminMenuItems = [
     icon: Truck,
     section: "delivery-tracking",
   },
-  {
-    title: "Profile",
-    icon: UserCircle,
-    section: "profile",
-  },
 ];
 
 // Menu items for Pantry Staff
 const pantryStaffMenuItems = [
   {
-    title: "Dashboard",
-    icon: LayoutDashboard,
-    section: "dashboard",
-  },
-  {
-    title: "Pantry Management",
-    icon: CookingPot,
-    section: "pantry",
-  },
-  {
-    title: "Delivery Tracking",
-    icon: Truck,
-    section: "delivery-tracking",
-  },
-  {
     title: "Profile",
     icon: UserCircle,
     section: "profile",
+  },
+  {
+    title: "Manage Food Preparation",
+    icon: CookingPot,
+    section: "manage-food-preparation",
+  },
+  {
+    title: "Manage Delivery Personnel",
+    icon: UserPlus,
+    section: "manage-delivery-personnel",
+  },
+  {
+    title: "Track Meal Deliveries",
+    icon: Truck,
+    section: "track-meal-deliveries",
   },
 ];
 
 // Menu items for Delivery Personnel
 const deliveryPersonnelMenuItems = [
   {
+    title: "Profile",
+    icon: UserCircle,
+    section: "profile",
+  },
+  {
     title: "Dashboard",
     icon: LayoutDashboard,
     section: "dashboard",
@@ -80,23 +88,21 @@ const deliveryPersonnelMenuItems = [
     icon: Truck,
     section: "delivery-tracking",
   },
-  {
-    title: "Profile",
-    icon: UserCircle,
-    section: "profile",
-  },
 ];
+
 const handleLogOut = () => {
-  //remove the cookie and user type from local storage
+  // Remove the cookie and user type from local storage
   localStorage.removeItem("userType");
+  localStorage.removeItem("userId");
   localStorage.removeItem("token");
 
-  //redirect to login page
+  // Redirect to login page
   window.location.href = "/login";
 };
 
 export function Sidebar({ onSelectSection, userType }) {
-  const [activeSection, setActiveSection] = useState("dashboard");
+  // Set the initial active section to "profile"
+  const [activeSection, setActiveSection] = useState("profile");
 
   // Get menu items based on user type
   const getMenuItems = () => {
