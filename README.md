@@ -12,7 +12,7 @@ A **MERN stack** application for managing hospital food delivery. It includes fe
 
 1. **Clone the Repository:**
    ```bash
-   git clone https://github.com/your-username/Hospital-Food-Delivery-Management-system.git
+   https://github.com/swarajmahadik123/Hospital-Food-Delivery-Management-system.git
    cd Hospital-Food-Delivery-Management-system
    ```
 
