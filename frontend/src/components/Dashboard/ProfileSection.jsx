@@ -63,6 +63,7 @@ export default function ProfileSection() {
   };
 
   return (
+    
     <motion.div
       key={refreshKey} // Force re-render when refreshKey changes
       initial="initial"

@@ -11,6 +11,7 @@ import ManageFoodPreparationSection from "../components/Dashboard/pantrystaff/Ma
 import ManageDeliveryPersonnelSection from "../components/Dashboard/pantrystaff/ManageDeliveryPersonnelSection";
 import DeliveryPersonnelTracking from "../components/Dashboard/deliverypersonnel/DeliveryPersonnelTracking";
 import ProfileSection from "../components/Dashboard/ProfileSection";
+import Notifications from "../components/Notification";
 
 export default function Dashboard() {
   const [userType, setUserType] = useState(null);
@@ -59,6 +60,8 @@ export default function Dashboard() {
         return userType === "delivery_personnel" ? (
           <DeliveryPersonnelTracking />
         ) : null;
+      case "notifications":
+        return <Notifications />;
 
       default:
         return null;
@@ -71,16 +74,7 @@ export default function Dashboard() {
 
       <main className="flex-1 p-8 overflow-auto">
         <div className="max-w-6xl mx-auto">
-          <motion.h1
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-2xl font-bold mb-8"
-          >
-            {selectedSection === "dashboard"
-              ? "Dashboard Overview"
-              : selectedSection.charAt(0).toUpperCase() +
-                selectedSection.slice(1)}
-          </motion.h1>
+         
 
           {/* Render the selected section */}
           {renderSection()}

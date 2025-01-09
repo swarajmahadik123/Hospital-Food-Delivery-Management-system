@@ -56,6 +56,9 @@ export default function DietChartSection() {
 
   return (
     <div className="space-y-6">
+      <h2 className="text-2xl font-bold mb-6 text-gray-800">
+        Diet Chart
+      </h2>
       <AnimatePresence mode="wait">
         {selectedPatient ? (
           <motion.div

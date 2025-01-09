@@ -16,13 +16,13 @@ export default function Login() {
     setError("");
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/auth/login",
+        `${process.env.REACT_APP_URL}/api/auth/login`,
         {
           email,
           password,
         }
       );
-      console.log(response.data);
+      
       localStorage.setItem("userType", response.data.role);
       localStorage.setItem("userId", response.data._id);
       // Store the token in local storage
@@ -99,6 +99,20 @@ export default function Login() {
           >
             Sign in
           </motion.button>
+        </div>
+
+        {/* Additional "Create Account" Section */}
+        <div className="text-center">
+          <p className="text-sm text-gray-600">
+            Don't have an account?{" "}
+            <button
+              type="button"
+              onClick={() => navigate("/signup")}
+              className="font-medium text-[#4318FF] hover:text-[#3B15E0] focus:outline-none"
+            >
+              Create account
+            </button>
+          </p>
         </div>
       </form>
     </AuthLayout>

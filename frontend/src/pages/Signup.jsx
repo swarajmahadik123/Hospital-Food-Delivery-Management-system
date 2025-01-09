@@ -17,10 +17,10 @@ export default function Signup() {
     setError("");
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/auth/register",
+        `${process.env.REACT_APP_URL}/api/auth/register`,
         { name, email, password, role }
       );
-      console.log(response.data);
+      
 
       // Set a cookie after successful registration
       document.cookie = `token=${response.data.token}; path=/; max-age=3600`; // Expires in 1 hour
@@ -139,6 +139,20 @@ export default function Signup() {
           >
             Sign up
           </motion.button>
+        </div>
+
+        {/* Additional "Create Account" Button */}
+        <div className="text-center">
+          <p className="text-sm text-gray-600">
+            Already have an account?{" "}
+            <button
+              type="button"
+              onClick={() => navigate("/login")}
+              className="font-medium text-[#4318FF] hover:text-[#3B15E0] focus:outline-none"
+            >
+              Log in
+            </button>
+          </p>
         </div>
       </form>
     </AuthLayout>

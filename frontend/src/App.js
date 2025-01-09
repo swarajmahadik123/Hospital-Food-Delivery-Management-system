@@ -4,8 +4,7 @@ import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login"; // Import Login component
 import Signup from "./pages/Signup"; // Import Signup component
 import { UserProvider } from "./context/userContext";
-import { useContext } from "react";
-
+import ProtectedRoute from "./components/Auth/ProtectedRoute";
 function App() {
   
   return (
@@ -18,7 +17,11 @@ function App() {
           {/* Route for the dashboard */}
           <Route
             path="/dashboard"
-            element={<Dashboard  />}
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
           />
 
           {/* Route for the login page */}

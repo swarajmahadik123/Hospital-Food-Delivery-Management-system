@@ -54,3 +54,26 @@ export const login = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+export const verifyLogin = async (req, res) => {
+  try {
+    const token = req.header("Authorization")?.replace("Bearer ", "");
+    if (!token) {
+      return res
+        .status(401)
+        .json({ message: "No token, authorization denied" });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    //find id in User if present then return isValid: true else false
+    const user = await User.findById(decoded.id);
+    if (!user) {
+      return res.status(401).json({ message: "Invalid token" });
+    }
+
+    res.json({ isValid: true, role: user.role ,_id: user._id});
+  
+  } catch (error) {
+    res.status(401).json({ message: "Invalid token" });
+  }
+}

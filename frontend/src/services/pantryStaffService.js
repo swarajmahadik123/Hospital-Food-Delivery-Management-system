@@ -1,11 +1,13 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:5000/api/admin"; // Replace with your backend URL
+const API_BASE_URL = `${process.env.REACT_APP_URL}/api`; // Replace with your backend URL
 
 // Fetch all pantry staff
 export const getAllPantryStaffUsers = async () => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/pantry-staff-users`);
+    const response = await axios.get(
+      `${API_BASE_URL}/admin/pantry-staff-users`
+    );
     return response.data;
   } catch (error) {
     throw error.response.data;
@@ -16,7 +18,7 @@ export const getAllPantryStaffUsers = async () => {
 export const createPantryStaff = async (staffData) => {
   try {
     const response = await axios.post(
-      `${API_BASE_URL}/create-pantry-staff`,
+      `${API_BASE_URL}/admin/create-pantry-staff`,
       staffData
     );
     return response.data;
@@ -28,7 +30,9 @@ export const createPantryStaff = async (staffData) => {
 // Fetch a single pantry staff member by ID
 export const getPantryStaffById = async (id) => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/pantry-staff/${id}`);
+    const response = await axios.get(
+      `${API_BASE_URL}/admin/pantry-staff/${id}`
+    );
     return response.data;
   } catch (error) {
     throw error.response.data;
@@ -39,7 +43,7 @@ export const getPantryStaffById = async (id) => {
 export const updatePantryStaff = async (id, staffData) => {
   try {
     const response = await axios.put(
-      `${API_BASE_URL}/pantry-staff/${id}`,
+      `${API_BASE_URL}/admin/pantry-staff/${id}`,
       staffData
     );
     return response.data;
@@ -51,7 +55,9 @@ export const updatePantryStaff = async (id, staffData) => {
 // Delete a pantry staff member
 export const deletePantryStaff = async (id) => {
   try {
-    const response = await axios.delete(`${API_BASE_URL}/pantry-staff/${id}`);
+    const response = await axios.delete(
+      `${API_BASE_URL}/admin/pantry-staff/${id}`
+    );
     return response.data;
   } catch (error) {
     throw error.response.data;
@@ -62,7 +68,7 @@ export const deletePantryStaff = async (id) => {
 export const assignFoodPreparationTask = async (taskData) => {
   try {
     const response = await axios.post(
-      `${API_BASE_URL}/food-preparation-tasks`,
+      `${API_BASE_URL}/admin/food-preparation-tasks`,
       taskData
     );
     return response.data;
@@ -74,7 +80,9 @@ export const assignFoodPreparationTask = async (taskData) => {
 // Fetch all food preparation tasks
 export const getAllFoodPreparationTasks = async () => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/food-preparation-tasks`);
+    const response = await axios.get(
+      `${API_BASE_URL}/admin/food-preparation-tasks`
+    );
     return response.data;
   } catch (error) {
     throw error.response.data;
@@ -84,7 +92,7 @@ export const getAllFoodPreparationTasks = async () => {
 export const getAssignedMealTasks = async (userId) => {
   try {
     const response = await axios.get(
-      `${API_BASE_URL}/assigned-meal-tasks/${userId}`
+      `${API_BASE_URL}/admin/assigned-meal-tasks/${userId}`
     );
     return response.data;
   } catch (error) {
@@ -94,7 +102,10 @@ export const getAssignedMealTasks = async (userId) => {
 
 export const createMealTask = async (taskData) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/meal-tasks`, taskData);
+    const response = await axios.post(
+      `${API_BASE_URL}/admin/meal-tasks`,
+      taskData
+    );
     return response.data; // { message: "Meal task created successfully.", task: newMealTask }
   } catch (error) {
     throw new Error(
@@ -105,7 +116,7 @@ export const createMealTask = async (taskData) => {
 
 export const getAllMealTasks = async () => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/meal-tasks-all`);
+    const response = await axios.get(`${API_BASE_URL}/admin/meal-tasks-all`);
     return response.data;
   } catch (error) {
     throw new Error("Failed to fetch meal tasks.");
@@ -114,9 +125,12 @@ export const getAllMealTasks = async () => {
 }
 export const updateMealTaskStatus = async (taskId, newStatus) => {
   try {
-    const response = await axios.put(`${API_BASE_URL}/meal-tasks/${taskId}/status`, {
-      status: newStatus,
-    });
+    const response = await axios.put(
+      `${API_BASE_URL}/admin/meal-tasks/${taskId}/status`,
+      {
+        status: newStatus,
+      }
+    );
     return response.data;
   } catch (error) {
     throw new Error("Failed to update task status.");
@@ -125,7 +139,9 @@ export const updateMealTaskStatus = async (taskId, newStatus) => {
 
 export const getAllPreparedMealTasks = async () => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/prepared-meal-tasks`);
+    const response = await axios.get(
+      `${API_BASE_URL}/admin/prepared-meal-tasks`
+    );
     return response.data;
   } catch (error) {
     throw new Error("Failed to fetch prepared meal tasks.");
@@ -135,7 +151,7 @@ export const getAllPreparedMealTasks = async () => {
 export const assignDeliveryPerson = async (taskId, deliveryPersonnelId) => {
   try {
     const response = await axios.put(
-      `${API_BASE_URL}/assign-delivery-personnel/${taskId}`,
+      `${API_BASE_URL}/admin/assign-delivery-personnel/${taskId}`,
       {
         deliveryPersonId: deliveryPersonnelId,
       }
@@ -148,7 +164,9 @@ export const assignDeliveryPerson = async (taskId, deliveryPersonnelId) => {
 
 export const markTaskAsDelivered = async (taskId) => {  
   try {
-    const response = await axios.put(`${API_BASE_URL}/meal-tasks/${taskId}/mark-as-delivered`);
+    const response = await axios.put(
+      `${API_BASE_URL}/admin/meal-tasks/${taskId}/mark-as-delivered`
+    );
     return response.data;
   } catch (error) {
     throw new Error("Failed to mark task as delivered.");
@@ -157,7 +175,9 @@ export const markTaskAsDelivered = async (taskId) => {
 
 export const getAllDeliveryPersonnel = async () => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/all-dilivery-personnel`);
+    const response = await axios.get(
+      `${API_BASE_URL}/admin/all-dilivery-personnel`
+    );
     return response.data;
   } catch (error) {
     console.error("Error fetching delivery personnel:", error);

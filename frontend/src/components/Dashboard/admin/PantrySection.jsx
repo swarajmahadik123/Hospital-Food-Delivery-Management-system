@@ -3,8 +3,9 @@ import { useState, useEffect } from "react";
 import { getAllPantryStaffUsers } from "../../../services/pantryStaffService";
 import InputPantry from "./InputPantry";
 import AssignFood from "./AssignFood";
-import { getAllPatients } from "../../../services/patientServices";
+import { getAllPatients, getPatientById } from "../../../services/patientServices";
 import { Utensils, ClipboardList } from "lucide-react";
+import { getUserProfile } from "../../../services/userServices";
 
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
