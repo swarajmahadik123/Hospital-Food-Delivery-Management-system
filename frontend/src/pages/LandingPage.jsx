@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { motion, useAnimation, useInView } from "framer-motion";
 import { hero } from "../assets/assets.js";
 import {
@@ -12,6 +12,8 @@ import {
   Truck,
   LayoutDashboard,
   Bell,
+  X,
+  CookingPot,
 } from "lucide-react";
 
 const fadeInUp = {
@@ -36,20 +38,25 @@ const floatingAnimation = {
     ease: "easeInOut",
   },
 };
+
 const handleGetStarted = () => {
   window.location.href = "/dashboard";
 };
 
 export default function LandingPage() {
+  const [showVideo, setShowVideo] = useState(false);
+
+  const toggleVideo = () => {
+    setShowVideo(!showVideo);
+  };
+
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
       <header className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#868CFF] to-[#4318FF] flex items-center justify-center">
-              <Utensils className="w-5 h-5 text-white" />
-            </div>
+            <CookingPot className="h-8 w-8 text-[#4318FF]" />
             <span className="text-xl font-bold bg-gradient-to-r from-[#868CFF] to-[#4318FF] bg-clip-text text-transparent">
               MediFood
             </span>
@@ -95,7 +102,10 @@ export default function LandingPage() {
                   Get Started
                   <ArrowRight className="ml-2 h-4 w-4 inline" />
                 </button>
-                <button className="h-12 px-6 rounded-xl border-2">
+                <button
+                  onClick={toggleVideo}
+                  className="h-12 px-6 rounded-xl border-2 hover:bg-gray-50 transition-colors"
+                >
                   Watch Demo
                 </button>
               </div>
@@ -112,6 +122,25 @@ export default function LandingPage() {
           </div>
         </div>
       </motion.section>
+
+      {/* Video Modal */}
+      {showVideo && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
+          <div className="relative w-full max-w-4xl bg-white rounded-lg overflow-hidden shadow-2xl">
+            <button
+              onClick={toggleVideo}
+              className="absolute top-4 right-4 p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
+            >
+              <X className="w-6 h-6 text-gray-700" />
+            </button>
+            <iframe
+              src="https://drive.google.com/file/d/1Y4sC_dC8bhwFGjy7nMQOS8PCXMwMKNlN/preview"
+              className="w-full h-[500px]"
+              allow="autoplay"
+            ></iframe>
+          </div>
+        </div>
+      )}
 
       {/* Services Section */}
       <motion.section
@@ -181,10 +210,10 @@ export default function LandingPage() {
             ].map((service, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 50 }} // Start hidden and slightly below
-                whileInView={{ opacity: 1, y: 0 }} // Slide up and fade in
-                viewport={{ once: true, amount: 0.5 }} // Trigger animation only once and when 50% of the card is visible
-                transition={{ duration: 0.5, delay: index * 0.1 }} // Add a delay based on the card index
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.5 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
               >
                 <div className="group relative overflow-hidden hover:shadow-xl transition-shadow duration-500 border-0 bg-white/50 backdrop-blur-sm rounded-lg h-full">
                   <div className="p-6">
@@ -201,10 +230,6 @@ export default function LandingPage() {
                     <p className="text-sm sm:text-base text-gray-600">
                       {service.description}
                     </p>
-                    <div className="mt-4 flex items-center text-[#4318FF] opacity-0 group-hover:opacity-100 transition-opacity">
-                      <span className="text-sm font-medium">Learn more</span>
-                      <ChevronRight className="w-4 h-4 ml-1" />
-                    </div>
                   </div>
                 </div>
               </motion.div>
