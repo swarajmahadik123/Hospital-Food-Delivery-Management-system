@@ -16,7 +16,7 @@ const mealTaskSchema = new Schema(
     },
     assignedTo: {
       type: Schema.Types.ObjectId,
-      ref: "PantryStaff",
+      ref: "User",
       required: true,
     },
     preparationStatus: {
@@ -31,7 +31,7 @@ const mealTaskSchema = new Schema(
     },
     deliveryPersonnelId: {
       type: Schema.Types.ObjectId,
-      ref: "DeliveryPersonnel",
+      ref: "User",
     },
     deliveryTimestamp: { type: Date },
     deliveryNotes: { type: String },

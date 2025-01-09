@@ -1,19 +1,14 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Sidebar } from "../components/Dashboard/Sidebar";
-
-
-
-
 import DashboardSection from "../components/Dashboard/admin/DashboardSection";
 import PatientsSection from "../components/Dashboard/admin/PatientsSection";
 import DietChartSection from "../components/Dashboard/admin/DietChartsSection";
 import PantrySection from "../components/Dashboard/admin/PantrySection";
-import AdminDeliveryTrackingSection from "../components/Dashboard/admin/AdminDeliveryTracking"
+import AdminDeliveryTrackingSection from "../components/Dashboard/admin/AdminDeliveryTracking";
 
 import ManageFoodPreparationSection from "../components/Dashboard/pantrystaff/ManageFoodPreparationSection";
 import ManageDeliveryPersonnelSection from "../components/Dashboard/pantrystaff/ManageDeliveryPersonnelSection";
-import TrackMealDeliveriesSection from "../components/Dashboard/pantrystaff/TrackMealDeliveriesSection";
 import DeliveryPersonnelTracking from "../components/Dashboard/deliverypersonnel/DeliveryPersonnelTracking";
 import ProfileSection from "../components/Dashboard/ProfileSection";
 
@@ -39,15 +34,15 @@ export default function Dashboard() {
 
       // Admin Sections
       case "dashboard":
-        return userType === "admin" ? <DashboardSection/> : null;
+        return userType === "admin" ? <DashboardSection /> : null;
       case "patients":
-        return userType === "admin" ? <PatientsSection/> : null;
+        return userType === "admin" ? <PatientsSection /> : null;
       case "diet-charts":
-        return userType === "admin" ? <DietChartSection/>: null;
+        return userType === "admin" ? <DietChartSection /> : null;
       case "pantry":
         return userType === "admin" ? <PantrySection /> : null;
       case "delivery-tracking":
-        return userType === "admin" ? <AdminDeliveryTrackingSection/> : null;
+        return userType === "admin" ? <AdminDeliveryTrackingSection /> : null;
 
       // Pantry Staff Sections
       case "manage-food-preparation":
@@ -58,13 +53,9 @@ export default function Dashboard() {
         return userType === "pantry_staff" ? (
           <ManageDeliveryPersonnelSection />
         ) : null;
-      case "track-meal-deliveries":
-        return userType === "pantry_staff" ? (
-          <TrackMealDeliveriesSection />
-        ) : null;
 
       // Delivery Personnel Sections
-      case "delivery-tracking":
+      case "delivery-tracking-delivery-personnel":
         return userType === "delivery_personnel" ? (
           <DeliveryPersonnelTracking />
         ) : null;

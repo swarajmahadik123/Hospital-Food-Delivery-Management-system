@@ -64,11 +64,6 @@ const pantryStaffMenuItems = [
     icon: UserPlus,
     section: "manage-delivery-personnel",
   },
-  {
-    title: "Track Meal Deliveries",
-    icon: Truck,
-    section: "track-meal-deliveries",
-  },
 ];
 
 // Menu items for Delivery Personnel
@@ -79,14 +74,9 @@ const deliveryPersonnelMenuItems = [
     section: "profile",
   },
   {
-    title: "Dashboard",
-    icon: LayoutDashboard,
-    section: "dashboard",
-  },
-  {
     title: "Delivery Tracking",
     icon: Truck,
-    section: "delivery-tracking",
+    section: "delivery-tracking-delivery-personnel",
   },
 ];
 

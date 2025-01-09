@@ -123,6 +123,29 @@ export const updateMealTaskStatus = async (taskId, newStatus) => {
   }
 };
 
+export const getAllPreparedMealTasks = async () => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/prepared-meal-tasks`);
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to fetch prepared meal tasks.");
+  }
+}
+
+export const assignDeliveryPerson = async (taskId, deliveryPersonnelId) => {
+  try {
+    const response = await axios.put(
+      `${API_BASE_URL}/assign-delivery-personnel/${taskId}`,
+      {
+        deliveryPersonId: deliveryPersonnelId,
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to assign delivery person.");
+  }
+};
+
 export const markTaskAsDelivered = async (taskId) => {  
   try {
     const response = await axios.put(`${API_BASE_URL}/meal-tasks/${taskId}/mark-as-delivered`);
@@ -131,3 +154,13 @@ export const markTaskAsDelivered = async (taskId) => {
     throw new Error("Failed to mark task as delivered.");
   }
 } 
+
+export const getAllDeliveryPersonnel = async () => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/all-dilivery-personnel`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching delivery personnel:", error);
+    throw error;
+  }
+};

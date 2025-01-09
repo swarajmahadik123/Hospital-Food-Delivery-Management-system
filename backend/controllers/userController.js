@@ -1,6 +1,5 @@
 import User from "../models/User.js";
 
-
 // Get a single user by ID
 export const getUserById = async (req, res) => {
   try {
@@ -43,4 +42,14 @@ export const updateUser = async (req, res) => {
   }
 };
 
+export const getAllDiliveryPersonnel = async (req, res) => {
+  try {
+    const deliveryPersonnel = await User.find({ role: "delivery_personnel" });
+    console.log(deliveryPersonnel);
 
+    res.status(200).json(deliveryPersonnel);
+  } catch (error) {
+    console.error("Error fetching delivery personnel:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};

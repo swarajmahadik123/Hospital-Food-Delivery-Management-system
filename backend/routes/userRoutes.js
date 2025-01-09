@@ -8,11 +8,12 @@ const router = express.Router();
 
 
 
-// Get a single user by ID
-router.get("/:id", getUserById);
 
-// Update a user by ID
+router.get("/:id", getUserById);
 router.put("/:id", updateUser);
+
+
+
 
 
 export default router;

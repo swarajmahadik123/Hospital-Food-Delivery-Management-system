@@ -162,7 +162,7 @@ export const deleteFoodChart = async (req, res) => {
 // Generate a diet char with gemini api
 
 // Initialize Gemini API
-const genAI = new GoogleGenerativeAI("AIzaSyCbcKwhxD7AUmZtjrnFfLMNMdRO2U5_WYI"); // Replace with your Gemini API key
+const genAI = new GoogleGenerativeAI(`${process.env.GEMINI_API_KEY}`); // Replace with your Gemini API key
 
 export const generateDietChart = async (req, res) => {
   try {
@@ -432,5 +432,39 @@ export const markTaskStatus = async (req, res) => {
   } catch (error) {
     console.error("Error updating task status:", error);
     res.status(500).json({ message: "Failed to update task status" });
+  }
+};
+
+export const getAllPreparedTasks = async (req, res) => {
+  try {
+    const tasks = await MealTask.find({ preparationStatus: "prepared" });
+    res.status(200).json(tasks);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch tasks" });
+  }
+};
+
+export const assignDeliveryPersonel = async (req, res) => {
+  const { taskId } = req.params;
+  const { deliveryPersonId } = req.body;
+  console.log("assignDeliveryPersonel", deliveryPersonId);
+  try {
+    const updatedTask = await MealTask.findByIdAndUpdate(
+      taskId,
+      {
+        deliveryPersonnelId: deliveryPersonId,
+        deliveryStatus: "out_for_delivery",
+      },
+      { new: true }
+    );
+
+    if (!updatedTask) {
+      return res.status(404).json({ message: "Meal task not found" });
+    }
+
+    res.status(200).json(updatedTask);
+  } catch (error) {
+    console.error("Error assigning delivery personnel:", error);
+    res.status(500).json({ message: "Failed to assign delivery personnel" });
   }
 };

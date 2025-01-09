@@ -20,7 +20,10 @@ import {
   getPantryStaffById,
   getAssignedMealTasks,
   markTaskStatus,
+  getAllPreparedTasks,
+  assignDeliveryPersonel,
 } from "../controllers/adminController.js";
+import { getAllDiliveryPersonnel } from '../controllers/userController.js';
 
 const router = express.Router();
 
@@ -50,6 +53,11 @@ router.get("/meal-tasks-all",getAllTasks);
 router.get("/assigned-meal-tasks/:id",getAssignedMealTasks);    
 router.put("/meal-tasks/:id/mark-as-delivered", markAsDelivered);
 router.put("/meal-tasks/:id/status",markTaskStatus);
+router.get("/prepared-meal-tasks",getAllPreparedTasks);
+router.put("/assign-delivery-personnel/:taskId",assignDeliveryPersonel);
+
+router.get("/all-dilivery-personnel", getAllDiliveryPersonnel);
+
 
 
 export default router;
