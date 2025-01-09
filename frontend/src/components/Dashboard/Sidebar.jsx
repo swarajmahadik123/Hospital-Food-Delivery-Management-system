@@ -11,6 +11,7 @@ import {
   Bell,
 } from "lucide-react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate from react-router-dom
 import { Menu, X } from "lucide-react"; // Import hamburger and close icons
 
 // Menu items for Admin
@@ -103,6 +104,7 @@ const handleLogOut = () => {
 export function Sidebar({ onSelectSection, userType }) {
   const [activeSection, setActiveSection] = useState("profile");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); // State to manage sidebar visibility
+  const navigate = useNavigate(); // useNavigate should be used inside the component
 
   // Get menu items based on user type
   const getMenuItems = () => {
@@ -160,7 +162,10 @@ export function Sidebar({ onSelectSection, userType }) {
         transition={{ type: "tween", duration: 0.3 }}
         className="fixed lg:static h-screen w-64 bg-white shadow-xl p-6 z-50"
       >
-        <div className="flex items-center gap-2 mb-8">
+        <div
+          onClick={() => navigate("/")}
+          className="flex items-center gap-2 mb-8"
+        >
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
