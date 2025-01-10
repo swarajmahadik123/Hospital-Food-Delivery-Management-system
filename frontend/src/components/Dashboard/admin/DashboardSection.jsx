@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { StatsCard } from "../StatCard";
-import { Users, Utensils, UserPlus } from "lucide-react";
+import { Users, Utensils, UserPlus, Loader2 } from "lucide-react"; // Import Loader2 for the spinner
 import { useEffect, useState } from "react";
 import {
   getAllusers,
@@ -19,12 +19,23 @@ export default function DashboardSection() {
   const [totalEmployees, setTotalEmployees] = useState(0);
   const [pantryAlerts, setPantryAlerts] = useState([]);
   const [deliveryAlerts, setDeliveryAlerts] = useState([]);
+  const [loading, setLoading] = useState(true); // Add loading state
 
   // Function to calculate the time difference in minutes
   const getTimeDifferenceInMinutes = (timestamp) => {
     const currentTime = new Date();
     const taskTime = new Date(timestamp);
     return (currentTime - taskTime) / (1000 * 60); // Convert milliseconds to minutes
+  };
+
+  // Function to format minutes into hours and minutes
+  const formatMinutesToHoursAndMinutes = (minutes) => {
+    if (minutes < 60) {
+      return `${Math.floor(minutes)} minutes`; // If less than 60 minutes, return as is
+    }
+    const hours = Math.floor(minutes / 60); // Get the number of hours
+    const remainingMinutes = Math.floor(minutes % 60); // Get the remaining minutes
+    return `${hours} hours ${remainingMinutes} minutes`; // Return formatted string
   };
 
   const handleNotify = async (alertData, type) => {
@@ -105,7 +116,7 @@ export default function DashboardSection() {
             await fetchDetails(task);
 
           // Check for pantry alerts (preparationStatus is not "prepared" for more than 30 minutes)
-          if (task.preparationStatus !== "prepared" && timeDifference > 1) {
+          if (task.preparationStatus !== "prepared" && timeDifference > 30) {
             pantryAlertsList.push({
               mealType: task.mealType,
               patientName, // Use patient name instead of ID
@@ -119,7 +130,7 @@ export default function DashboardSection() {
           // Check for delivery alerts (deliveryStatus is "out_for_delivery" for more than 15 minutes)
           if (
             task.deliveryStatus === "out_for_delivery" &&
-            timeDifference > 1
+            timeDifference > 15
           ) {
             deliveryAlertsList.push({
               orderId: task._id, // Use the meal task ID as the order ID
@@ -137,6 +148,8 @@ export default function DashboardSection() {
         setDeliveryAlerts(deliveryAlertsList);
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
+      } finally {
+        setLoading(false); // Set loading to false after fetching data
       }
     };
 
@@ -180,7 +193,14 @@ export default function DashboardSection() {
         >
           <h2 className="text-lg font-semibold mb-4">Pantry Alerts</h2>
           <div className="space-y-4 max-h-[400px] overflow-y-auto scrollbar-hide">
-            {pantryAlerts.length > 0 ? (
+            {loading ? ( // Show loading spinner while data is being fetched
+              <div className="flex items-center justify-center py-8">
+                <Loader2 className="w-8 h-8 text-[#4318FF] animate-spin" />
+                <span className="ml-2 text-gray-600">
+                  Loading pantry alerts...
+                </span>
+              </div>
+            ) : pantryAlerts.length > 0 ? (
               pantryAlerts.map((alert, index) => (
                 <div
                   key={index}
@@ -193,11 +213,11 @@ export default function DashboardSection() {
                     <p className="text-sm text-gray-500">
                       Assigned To: {alert.assignedUserName}
                     </p>
-
                     <p className="text-sm text-gray-500">
                       Pending for{" "}
-                      {Math.floor(getTimeDifferenceInMinutes(alert.createdAt))}{" "}
-                      minutes
+                      {formatMinutesToHoursAndMinutes(
+                        getTimeDifferenceInMinutes(alert.createdAt)
+                      )}
                     </p>
                   </div>
                   <button
@@ -223,7 +243,14 @@ export default function DashboardSection() {
         >
           <h2 className="text-lg font-semibold mb-4">Delivery Alerts</h2>
           <div className="space-y-4 max-h-[400px] overflow-y-auto scrollbar-hide">
-            {deliveryAlerts.length > 0 ? (
+            {loading ? ( // Show loading spinner while data is being fetched
+              <div className="flex items-center justify-center py-8">
+                <Loader2 className="w-8 h-8 text-[#4318FF] animate-spin" />
+                <span className="ml-2 text-gray-600">
+                  Loading delivery alerts...
+                </span>
+              </div>
+            ) : deliveryAlerts.length > 0 ? (
               deliveryAlerts.map((alert, index) => (
                 <div
                   key={index}
@@ -241,8 +268,9 @@ export default function DashboardSection() {
                     </p>
                     <p className="text-sm text-gray-500">
                       Out for delivery for{" "}
-                      {Math.floor(getTimeDifferenceInMinutes(alert.createdAt))}{" "}
-                      minutes
+                      {formatMinutesToHoursAndMinutes(
+                        getTimeDifferenceInMinutes(alert.createdAt)
+                      )}
                     </p>
                   </div>
                   <button
