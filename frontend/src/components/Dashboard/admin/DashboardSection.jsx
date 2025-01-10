@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { StatsCard } from "../StatCard";
-import { Users, Utensils, UserPlus, Loader2 } from "lucide-react"; // Import Loader2 for the spinner
+import { Users, Utensils, UserPlus, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import {
   getAllusers,
@@ -19,7 +19,7 @@ export default function DashboardSection() {
   const [totalEmployees, setTotalEmployees] = useState(0);
   const [pantryAlerts, setPantryAlerts] = useState([]);
   const [deliveryAlerts, setDeliveryAlerts] = useState([]);
-  const [loading, setLoading] = useState(true); // Add loading state
+  const [loading, setLoading] = useState(true);
 
   // Function to calculate the time difference in minutes
   const getTimeDifferenceInMinutes = (timestamp) => {
@@ -38,8 +38,23 @@ export default function DashboardSection() {
     return `${hours} hours ${remainingMinutes} minutes`; // Return formatted string
   };
 
-  const handleNotify = async (alertData, type) => {
+  const handleNotify = async (alertData, type, index) => {
     try {
+      // Update the specific alert's notifying state
+      if (type === "pantry") {
+        setPantryAlerts((prev) =>
+          prev.map((alert, i) =>
+            i === index ? { ...alert, notifying: true } : alert
+          )
+        );
+      } else if (type === "delivery") {
+        setDeliveryAlerts((prev) =>
+          prev.map((alert, i) =>
+            i === index ? { ...alert, notifying: true } : alert
+          )
+        );
+      }
+
       let message = "";
       if (type === "pantry") {
         message = `Prepare the ${alertData.mealType} meal for ${alertData.patientName}.`;
@@ -57,6 +72,21 @@ export default function DashboardSection() {
     } catch (error) {
       console.error("Error sending notification:", error);
       window.alert("Failed to send notification.");
+    } finally {
+      // Reset the specific alert's notifying state
+      if (type === "pantry") {
+        setPantryAlerts((prev) =>
+          prev.map((alert, i) =>
+            i === index ? { ...alert, notifying: false } : alert
+          )
+        );
+      } else if (type === "delivery") {
+        setDeliveryAlerts((prev) =>
+          prev.map((alert, i) =>
+            i === index ? { ...alert, notifying: false } : alert
+          )
+        );
+      }
     }
   };
 
@@ -116,7 +146,7 @@ export default function DashboardSection() {
             await fetchDetails(task);
 
           // Check for pantry alerts (preparationStatus is not "prepared" for more than 30 minutes)
-          if (task.preparationStatus !== "prepared" && timeDifference > 30) {
+          if (task.preparationStatus !== "prepared" && timeDifference > 1) {
             pantryAlertsList.push({
               mealType: task.mealType,
               patientName, // Use patient name instead of ID
@@ -124,13 +154,14 @@ export default function DashboardSection() {
               deliveryPersonnelName, // Use delivery personnel name instead of ID
               createdAt: task.createdAt,
               assignedTo: task.assignedTo, // Include assignedTo for notifications
+              notifying: false, // Add notifying state for each alert
             });
           }
 
           // Check for delivery alerts (deliveryStatus is "out_for_delivery" for more than 15 minutes)
           if (
             task.deliveryStatus === "out_for_delivery" &&
-            timeDifference > 15
+            timeDifference > 1
           ) {
             deliveryAlertsList.push({
               orderId: task._id, // Use the meal task ID as the order ID
@@ -139,6 +170,7 @@ export default function DashboardSection() {
               status: task.deliveryStatus,
               createdAt: task.createdAt,
               assignedTo: task.assignedTo, // Include assignedTo for notifications
+              notifying: false, // Add notifying state for each alert
             });
           }
         }
@@ -221,10 +253,11 @@ export default function DashboardSection() {
                     </p>
                   </div>
                   <button
-                    onClick={() => handleNotify(alert, "pantry")}
-                    className="px-4 py-2 text-sm text-white bg-gradient-to-br from-[#868CFF] to-[#4318FF] rounded-lg shadow-md hover:shadow-lg transition-shadow"
+                    onClick={() => handleNotify(alert, "pantry", index)}
+                    disabled={alert.notifying} // Disable only the clicked button
+                    className="px-4 py-2 text-sm text-white bg-gradient-to-br from-[#868CFF] to-[#4318FF] rounded-lg shadow-md hover:shadow-lg transition-shadow disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    Notify
+                    {alert.notifying ? "Sending..." : "Notify"}
                   </button>
                 </div>
               ))
@@ -274,10 +307,11 @@ export default function DashboardSection() {
                     </p>
                   </div>
                   <button
-                    onClick={() => handleNotify(alert, "delivery")}
-                    className="px-4 py-2 text-sm text-white bg-gradient-to-br from-[#868CFF] to-[#4318FF] rounded-lg shadow-md hover:shadow-lg transition-shadow"
+                    onClick={() => handleNotify(alert, "delivery", index)}
+                    disabled={alert.notifying} // Disable only the clicked button
+                    className="px-4 py-2 text-sm text-white bg-gradient-to-br from-[#868CFF] to-[#4318FF] rounded-lg shadow-md hover:shadow-lg transition-shadow disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    Notify
+                    {alert.notifying ? "Sending..." : "Notify"}
                   </button>
                 </div>
               ))
